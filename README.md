@@ -7,7 +7,7 @@ Nesta aplicação apliquei alguns conhecimentos sobre o desenvolvimento web na p
 
 - **Autenticação e Autorização**: Gerenciamento de usuários com autenticação via JWT.
 - **Gerenciamento de Contas Bancárias**: Criação e consulta de contas bancárias.
-- **Transações Bancárias**: Depósitos, saques e transferências entre contas.
+- **Transações Bancárias**: Depósitos e saques
 
 ## Tecnologias Utilizadas
 
@@ -22,27 +22,23 @@ Nesta aplicação apliquei alguns conhecimentos sobre o desenvolvimento web na p
 
 ### Autenticação
 
-- **POST /api/auth/login**: Autentica o usuário e retorna um token JWT.
-- **POST /auth/register**: Cria um novo usuário.
+- **POST /auth/login** — Login de usuário (retorna um token JWT)
+- **POST /auth/register** — Cadastro de usuário
 
 ### Usuários
 
 
-- **GET /users/listAll**: Retorna a lista de usuários (requer autenticação).
-- **GET /users/findOne{id}**: Consulta os dados de um usuário (requer autenticação).
-- **PUT /users/updateUser{id}**: Atualiza os dados de um usuário (requer autenticação).
-- **DELETE /users/deleteUser/{id}**: Remove um usuário (requer autenticação).
+- **GET /users/listAll** — Lista todos os usuários (ADMIN)
+- **GET /users/{id}** — Busca usuário por ID (ADMIN)
+- **PUT /users/{id}/update** — Atualiza usuário (ADMIN)
+- **DELETE /users/{id}/delete** — Remove usuário (ADMIN)
 
 ### Contas Bancárias
 
-- **GET /accounts/showAccount/{id}**: Retorna os detalhes de uma conta (requer autenticação).
-- **GET /accounts/showCard/{id}**: Retorna os detalhes de um cartão (requer autenticação).
-
-
-### Transações
-
-- **POST /account/deposit/{id}**: Realiza um depósito.
-- **POST /account/withDraw/{id}**: Realiza um saque.
+- **POST /account/{id}/deposit**: Deposita valor na conta.
+- **POST /account/{id}/withdraw**: Saque na conta.
+- **GET /account/{id}**: Consulta dados da conta.
+- **GET /account/card/{id}**: Consulta dados do cartão.
 
 ## Segurança
 
@@ -64,6 +60,8 @@ src/
 │   ├── java/me/shrk/BankAccountAplication
 │   │   ├── segurity     # Configurações do Spring Security
 │   │   ├── controllers # Controladores REST
+|   |   ├── exceptions # Custom Exceptions
+|   |   ├── infra      # Advice Controler
 │   │   ├── models      # Modelos de dados
 │   │   ├── repositories # Repositórios JPA
 │   │   ├── services    # Regras de negócio
