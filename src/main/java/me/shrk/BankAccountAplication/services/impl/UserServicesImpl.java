@@ -1,6 +1,10 @@
 package me.shrk.BankAccountAplication.services.impl;
 
 
+import me.shrk.BankAccountAplication.exceptions.SameAccountNumber;
+import me.shrk.BankAccountAplication.exceptions.SameCardNumber;
+import me.shrk.BankAccountAplication.exceptions.UserAlreadyDeleted;
+import me.shrk.BankAccountAplication.exceptions.UserNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,16 +27,17 @@ public class UserServicesImpl implements UserService{
     @Override
     public User create(RegisterDTO user) {
 
+
         String pass = encoder.encode(user.password());
 
         User u = new User(user.nome(), user.email(), pass, user.account(), user.card(), user.role());
         String numberAccount = u.getAccount().getNumber();
-        String CardNmber = u.getCard().getNumber();
+        String CardNumber = u.getCard().getNumber();
         if(userRepository.existsByAccountNumber(numberAccount)){
-            return null;
+            throw new SameAccountNumber();
         }
-        if(userRepository.existsByCardNumber(CardNmber)){
-            return null;
+        if(userRepository.existsByCardNumber(CardNumber)){
+            throw new SameCardNumber();
         }
 
         return userRepository.save(u);
@@ -50,17 +55,30 @@ public class UserServicesImpl implements UserService{
             userRepository.save(u);
             return true;
         }
-        return false;
+        throw new UserNotFound("user not found");
     }
 
     @Override
     public void delete(Long id) {
+        User u = userRepository.findById(id).orElse(null);
+
+        if(u == null){
+            throw new UserAlreadyDeleted();
+        }
+
         userRepository.deleteById(id);
     }
 
     @Override
     public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        User u = userRepository.findById(id).orElse(null);
+
+        if(u == null){
+            throw new UserNotFound("User not found");
+        }
+
+        return u;
+
     }
 
     @Override

@@ -3,6 +3,8 @@ package me.shrk.BankAccountAplication.controllers;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,37 +25,37 @@ public class BankController {
     private BankService service;
 
     
-    @PostMapping("/deposit/{id}")
+    @PostMapping("/{id}/deposit")
     public ResponseEntity deposit(@PathVariable("id") Long id, @RequestBody BigDecimal value){
         if(service.deposit(id, value) == "success"){
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().body("Fail to deposit");
     }
 
-    @PostMapping("/withDraw/{id}")
+    @PostMapping("/{id}/withdraw")
     public ResponseEntity withdraw(@PathVariable("id") Long id, @RequestBody BigDecimal value){
         if(service.withdraw(id, value) == "success"){
             return ResponseEntity.ok().build();
         }else{
-            return ResponseEntity.badRequest().body("insuficient funds");
+            return ResponseEntity.badRequest().body("insufficient funds");
         }
     }
 
-    @GetMapping("/showAccount/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Account> showAccount(@PathVariable("id") Long id){
         Account account = service.showAccount(id);
         if(account == null){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(account);
     }
 
-    @GetMapping("/showCard/{id}")
+    @GetMapping("/card/{id}")
     public ResponseEntity<Card> showCard(@PathVariable("id") Long id){
         Card card = service.showCard(id);
         if(card == null){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(card);
     }

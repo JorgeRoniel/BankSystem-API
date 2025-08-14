@@ -28,13 +28,13 @@ public class UserController {
         return ResponseEntity.ok(service.listUsers());
     }
 
-    @GetMapping("/FindOne/{id}")
-    public ResponseEntity<User> findOne(@PathParam("id") Long id){
+    @GetMapping("/{id}")
+    public ResponseEntity<User> findOne(@PathVariable("id") Long id){
         return ResponseEntity.ok(service.findById(id));
     }
 
     
-    @PutMapping("/updateUser/{id}")
+    @PutMapping("/{id}/update")
     public ResponseEntity update(@PathVariable("id") Long id, @RequestBody UpdateDTO data){
         if(service.update(id, data)){
             return ResponseEntity.ok().build();
@@ -43,7 +43,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/deleteUser/{id}")
+    @DeleteMapping("/{id}/delete")
     public ResponseEntity delete(@PathVariable("id") Long id){
         service.delete(id);
         return ResponseEntity.ok().build();
